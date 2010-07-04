@@ -1,6 +1,72 @@
 = async-proxy
 
-Description goes here.
+An Async proxy is a wrapper around a real object that intercepts method calls and runs them
+in an asynchronous way. 
+
+=Construction
+
+Async proxies will be generally constructed calling .async on any object. 
+
+=Behaviour
+
+Calling any method in async proxy creates a new thread in charge of running the actual computation 
+and control is immediately returned to the callee. 
+
+When the actual result of the method call is needed, call +sync+ on the returned value
+and this will wait (if necessary) for the thread to finish and provide the real value.
+
+Example:
+
+   async_recommendations = user.async.recommendations # computing the recommendations is really slow!
+
+   #do other stuff
+
+   print async_recommendations.sync
+
+=Chaining
+
+The result of a method call in an async proxy will itself be an async proxy. This allows for
+chained computations:
+
+ my_async_result = object.async.some_slow_method.and_another_one(with_an_argument).and_a_third_one
+
+ currency = user.async.country.currency
+
+Each chained method is run as soon as the previous level result is available.
+Calling sync in any dependent value will automatically wait for all dependencies.
+
+=Dependent computations
+
+Sometimes you want to run some code on the returned value as soon as it is available. With
+async proxy you do that with:
+
+- register_callback: run the code but do not care about the return value 
+ 
+   async_proxy.slow_method.register_callback{|return_value| puts return_value}
+
+- when_ready: returns yet another async proxy that lets you recover the block's returned value
+
+   squared = async_proxy.slow_method.when_ready{|return_value| return_value * return_value }
+   ..
+   squared.sync
+   
+=Automatic synchronization
+
+Some method calls automatically trigger synchronization:
+
+- to_s
+- inspect
+- each
+
+This means that in most cases you can treat an async object exactly in the same way that the
+wrapped object. You generally don't need to make explicit +sync+ calls (although you can if
+you want to control the exact moment the object will be "realized")
+
+= Locking and thread safety
+
+Async Proxy makes no attempt to guarantee thread safety. It can be considered as just syntactic
+sugar to automate the creations of threads, so if your code is not thread-safe or uses libraries
+that are not thread-safe mischief will happen. 
 
 == Note on Patches/Pull Requests
  
@@ -14,4 +80,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 Angel. See LICENSE for details.
+Copyright (c) 2010 Angel Faus. See LICENSE for details.
