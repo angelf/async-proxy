@@ -5,7 +5,7 @@ class Object
   end 
 
   # ensures we are dealing with the "real" synchronous object
-  def sync
-    self # a no-op in Object, will be redefine in async proxies classes
+  def sync(options = {})
+    self # a no-op in Object, will be redefined in async proxies classes
   end
 end

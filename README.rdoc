@@ -62,6 +62,14 @@ This means that in most cases you can treat an async object exactly in the same 
 wrapped object. You generally don't need to make explicit +sync+ calls (although you can if
 you want to control the exact moment the object will be "realized")
 
+=Soft timeouts
+Sometimes you are interested in a value only if it can be computed in a certain time.
+
+   async_result = async_proxy.slow_method
+   ..
+   result = async_result.sync(:soft_timeout => 0.30)
+     
+
 = Locking and thread safety
 
 Async Proxy makes no attempt to guarantee thread safety. It can be considered as just syntactic

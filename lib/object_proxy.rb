@@ -7,7 +7,7 @@ module AsyncProxy
       @callbacks = []
     end
     
-    def sync
+    def sync(options = {})
       @object
     end
     

@@ -5,6 +5,7 @@ class Integer
     Kernel.sleep(1)
     self + 1
   end
+  
 end
 
 describe "AsyncProxy" do
@@ -46,6 +47,10 @@ describe "AsyncProxy" do
     intermediate.sync.should == 1
     intermediate_plus_1.sync.should == 2
     intermediate_plus_2.sync.should == 3
+  end
+  
+  it "timeout" do
+    lambda {1.async.slow_inc.sync(:timeout => 0.5)}.should raise_error(Timeout::Error)
   end
   
 end

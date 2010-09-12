@@ -1,3 +1,4 @@
+
 module AsyncProxy
   
   # a specialization of ObjectProxy to be used when the wraped value is dependent on another
@@ -26,8 +27,17 @@ module AsyncProxy
       self
     end
     
-    def sync
-      wait_for_computation
+    # waits for the computation to finish and returns the actual result
+    #
+    # optional arguments:
+    #   - timeout: the maximum number of seconds that the computation can take.
+    
+    def sync(options = {})
+      if options[:timeout]
+        SystemTimer.timeout_after(options[:timeout]){wait_for_computation}
+      else
+        wait_for_computation
+      end
       @result
     end
 
@@ -41,7 +51,7 @@ module AsyncProxy
 
     def wait_for_computation
       callable.sync # ensures the callable has finished and run its callbacks
-      @thread.join if !@done
+      @thread.join unless @done
     end
     
     private
