@@ -52,5 +52,10 @@ describe "AsyncProxy" do
   it "timeout" do
     lambda {1.async.slow_inc.sync(:timeout => 0.5)}.should raise_error(Timeout::Error)
   end
+
+  it "trace_name exposes the method name" do
+    x = 1.async.slow_inc
+    x.trace_name.should == :slow_inc
+  end
   
 end

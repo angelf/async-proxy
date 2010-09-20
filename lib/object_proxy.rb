@@ -46,8 +46,8 @@ module AsyncProxy
     #
     # returns an async proxy object, that can be used exactly to recover the block's return
     # value or chain more computations    
-    def when_ready(&block)
-      result_proxy = AsyncProxy::ComputedProxy.new(self, block)
+    def when_ready(trace_name = nil, &block)
+      result_proxy = AsyncProxy::ComputedProxy.new(self, block, trace_name)
       register_callback {result_proxy.launch_computation}
       result_proxy
     end
@@ -65,7 +65,7 @@ module AsyncProxy
 
     private  
       def method_missing(symbol, *args)
-        when_ready do |obj|
+        when_ready(symbol) do |obj|
           obj.send(symbol, *args)
         end
       end

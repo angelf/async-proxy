@@ -12,10 +12,12 @@ module AsyncProxy
     
     attr_reader :callable
     attr_reader :proc
+    attr_reader :trace_name
     
-    def initialize(callable, proc)
-      @callable  = callable
-      @proc      = proc
+    def initialize(callable, proc, trace_name = nil)
+      @callable   = callable
+      @proc       = proc
+      @trace_name = trace_name
       @callbacks = []
     end
     
