@@ -52,11 +52,11 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<system_timer>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_dependency(%q<system_timer>, [">= 0"])
+      s.add_dependency(%q<SystemTimer>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<system_timer>, [">= 0"])
+    s.add_dependency(%q<SystemTimer>, [">= 0"])
   end
 end
 
