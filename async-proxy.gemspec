@@ -60,8 +60,13 @@ Gem::Specification.new do |s|
       end
     end
   else
-    s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<SystemTimer>, [">= 0"])
+    if RUBY_VERSION >= '1.9'
+      s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<Timeout>, [">= 0"])
+    else
+      s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<SystemTimer>, [">= 0"])
+    end
   end
 end
 
